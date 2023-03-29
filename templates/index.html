@@ -1,140 +1,173 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Immigration Prompt</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css">
-    <script  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	
+    <title>Immigration Prompt</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css">
+
+    <script src="
+https://cdn.jsdelivr.net/npm/ejs@3.1.9/ejs.min.js
+"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <style>
-		.prompt {
+        .prompt {
             background-color: #ffffff;
-			border-radius: 10px;
-            border:1px solid rgba(168, 168, 168, 0.168);
-			box-shadow: 0px 1px 2px rgba(0,0,0,0.1);
-			padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(168, 168, 168, 0.168);
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 10px;
             width: 100%;
-			margin-bottom: 20px;
-		}
+            margin-bottom: 20px;
+        }
 
-		.prompt input {
-			border: none;
-			outline: none;
-			width: 100%;
-			font-size: 1rem;
-			line-height: 1.5;
-			padding: 5px;
-			margin: 0;
-		}
+        .prompt input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 1rem;
+            line-height: 1.5;
+            padding: 5px;
+            margin: 0;
+        }
 
-		.prompt button {
-			border: none;
-			color: #fff;
-			border-radius: 5px;
-			padding: 5px 10px;
-			cursor: pointer;
-			margin-left: auto;
-		}
+        .prompt button {
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
         .sidebar {
-			position: fixed;
-			top: 0;
-			left: 0;
-			height: 100%;
-			width: 340px;
-			background-color: #343a40;
-			color: #fff;
-			padding: 20px;
-			z-index: 999;
-			overflow-y: auto;
-		}
-
-
-		.sidebar .brand {
-			color: #fff;
-			font-size: 1.3rem;
-			font-weight: bold;
-			text-align: center;
-			margin-bottom: 20px;
-		}
-        .h-60{
-            height:80vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 340px;
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+            z-index: 999;
             overflow-y: auto;
         }
-        .text-decoration-underline{
-            text-decoration: underline;
-        }
-        .history-ln .card-body{
-            background-color: #343a40;
-            color:white;
+
+
+        .sidebar .brand {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .history-ln .card-body:hover{
+        .h-60 {
+            height: 80vh;
+            overflow-y: auto;
+        }
+
+        .text-decoration-underline {
+            text-decoration: underline;
+        }
+
+        .history-ln .card-body {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .history-ln .card-body:hover {
             background-color: #ffffff;
-            color:black;
+            color: black;
             cursor: pointer;
         }
-        .logo-site{
+
+        .logo-site {
             max-height: 80px;
-    width: auto;
+            width: auto;
         }
-	</style>
+        .result-btn {
+            display: inline-block;
+            max-width: 200px; /* adjust as needed */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          ::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background-image: linear-gradient(to top,#ccecba 30%,#85bb65 100%);
+        }
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 6px rgba(65,65,65,0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+            margin-left: 10px;
+        }
+    </style>
 </head>
+
 <body>
-	<div class="container-fluid bg-gray">
+    <div class="container-fluid bg-gray">
         <div class="row">
             <div class="col-md-3">
                 <div class="sidebar">
                     <div class="brand mt-1">
-                        <img class="logo-site" src="/static/coat_of_arms_0.png" alt="Home" >
-                        </div>
+                        <img class="logo-site" src="/static/coat_of_arms_0.png" alt="Home">
+                    </div>
                     <div>
-                        <button class="btn btn-light w-100"> New Chat</button>
+                        <button class="btn btn-light w-100" id="save-btn"> New Chat</button>
 
                         <div class="mt-4">
-                            <h6>Conversations (10)</h6>
-                            <hr class="bg-light my-0 py-0"/>
-                            <div style="min-height:32em;">
-                                <div class="card mt-3 history-ln">
-                                    <div class="card-body py-2 rounded" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                        What are the requirements for requesting a VISA?
-                                      </div>
-                                  </div>
+                            <div class="d-flex align-items-center">
+                                <div class="col-10">
+                                    <h6>Conversations</h6>
+                                </div>
+                                <div class="col-2 justify-self-end">
+                                    <a class="btn btn-danger btn-small p-1 mb-1" style="width:40px;" id="clear-convos">
+                                        <span class="text-light bi bi-trash"></span></a>
+                                </div>
                             </div>
+                            <hr class="bg-light my-0 py-0" />
+                            <div id="history-tabs" style="min-height:32em;"></div>
                             <button class="btn btn-outline-light w-100">SHOW MORE..</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="h-60 mt-3">
-                    <div class="card">
-                        <h5 class="card-header">What are the requirements for E-Residency?</h5>
-                        <div class="card-body">
-                          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                          <a href="#" class="btn btn-success">Go somewhere</a>
-                        </div>
-                      </div>
+                <div class="h-60 mt-3" id="answers">
+                    
                 </div>
                 <div class="prompt">
                     <label for="message">Ask a question</label>
                     <div class="input-group">
                         <input type="text" id="message" placeholder="Type your query here...">
-                        <button type="button" class="bi bi-telegram btn-success btn"> GO</button>
+                        <button type="button" class="bi bi-telegram btn-success btn" id="send-btn"> GO</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 py-0">
+            <div class="col-md-3 py-0 d-xs-none">
                 <div class="card h-100">
                     <div class="card-body">
                         <h4 class="mt-3">Limitations</h4>
                         <p>
-                            It's important to note, however, that our tool has limitations in terms of accuracy and precision. While we have worked hard to ensure that our chatbot is as reliable as possible, there is still room for improvement. We have not had a lot of time to dedicate to this endeavor, and as a result, there may be some questions that our chatbot is not able to answer accurately.
+                            It's important to note, however, that our tool has limitations in terms of accuracy and
+                            precision. While we have worked hard to ensure that our chatbot is as reliable as possible,
+                            there is still room for improvement. We have not had a lot of time to dedicate to this
+                            endeavor, and as a result, there may be some questions that our chatbot is not able to
+                            answer accurately.
                         </p>
                         <h4 class="mt-3">Feedback</h4>
                         <p>
-                            We are committed to continually improving the accuracy and reliability of our chatbot, and we welcome any feedback or suggestions that you may have. We also encourage users to seek additional support from qualified professionals when necessary.
+                            We are committed to continually improving the accuracy and reliability of our chatbot, and
+                            we welcome any feedback or suggestions that you may have. We also encourage users to seek
+                            additional support from qualified professionals when necessary.
                         </p>
                         <img src="/static/Nita_uganda_final.png" alt="Home" width="320">
                     </div>
@@ -142,6 +175,91 @@
             </div>
         </div>
 
-	</div>
+    </div>
 </body>
+<script>
+    const session = {answers:[]};
+    const tpl = `<% answers.forEach(function(answer){ %>
+        <div class="card mb-2 mr-1">
+            <h5 class="card-header text-capitalize">
+                <%= answer.qn %></h5>
+            <div class="card-body">
+                <span class="badge badge-info" style="font-size:0.8rem;">Topic : <%= answer.topic %></span><br>
+                <p class="card-text"><%= answer.ans %>
+                </p>
+                <a href="<%= answer.link %>" target="_blank" class="btn btn-success btn-sm">more...</a>
+                <% answer.related.forEach(function(result){ %>
+                    <a href="<%= result.link %>" target="_blank" class="btn btn-outline-success btn-sm result-btn">
+                        <%= result.qn %>
+                    </a>
+                    <% }) %>
+            </div>
+        </div>
+        <% }) %>`;
+    const htpl = `<% history.forEach(function(answers,index){ %>
+        <div class="card mt-3 history-ln" onclick="getHistory(<%= index %>)">
+            <div class="card-body py-2 rounded"
+                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <%= answers[0].qn %>
+            </div>
+        </div>
+    <% }) %>`;
+    const default_ans = {
+        link:"https://www.immigration.go.ug/contact-us",
+        topic:"unknown",
+        ans:"Sorry, I do not have the answer to this query at the moment. Contact customer care.",
+        related:[]
+    };
+    const answer_el = document.getElementById("answers");
+    $("#send-btn").on("click",()=>{
+        const msg  = $("#message").val();
+        if(!msg)return -1;
+        $.get("/answers", {qn:msg},function(data, status){
+            if(!data["data"]){
+                session.answers.push({...default_ans,qn:msg});
+                $("#message").val("");
+                answer_el.innerHTML = ejs.render(tpl,{answers:session.answers});
+
+            }else{
+                session.answers.push({...data["data"],"related":data["related"]});
+                $("#message").val("");
+                answer_el.innerHTML = ejs.render(tpl,{answers:session.answers});
+            }
+        });
+    });
+    function loadHistory(){
+        let history = [];
+        if(localStorage.history){
+            history = JSON.parse(localStorage.history);
+        }
+        $("#history-tabs").html(ejs.render(htpl,{history:history.slice(0,5)}));
+    }
+    function getHistory(hindex){
+        let history = [];
+        if(localStorage.history){
+            history = JSON.parse(localStorage.history);
+            session.answers = history[hindex];
+            $("#answers").html(ejs.render(tpl,{answers:session.answers}));
+        }
+    }
+    $("#save-btn").on("click",()=>{
+        if(!session.answers.length)return -1;
+        let history = [];
+        if(localStorage.history){
+            history = JSON.parse(localStorage.history);
+        }
+        history.push(session.answers);
+        localStorage.setItem("history",JSON.stringify(history));
+        session.answers.length = 0;
+        answer_el.innerHTML = "";
+        loadHistory();
+    });
+    $("#clear-convos").on("click",()=>{
+        localStorage.clear();
+        loadHistory();
+    })
+    loadHistory();
+
+</script>
+
 </html>
