@@ -75,4 +75,8 @@ def similar_qns():
     result_dicts = sorted(result_dicts, key=lambda x: x['similarity'], reverse=True)
     
     # return the top five similar questions with their links and similarity scores as JSON
-    return jsonify(result_dicts[:3])
+    queries = [v for v in result_dicts[:3] if v['similarity'] < 0.3]
+    if not queries:
+        queries = [{"qn":"No related queries","link":"#"}]
+    
+    return jsonify(queries)
