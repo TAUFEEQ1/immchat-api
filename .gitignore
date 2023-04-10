@@ -2,6 +2,7 @@
 dbloader.py
 chromedriver.exe
 Im_act.txt
+.env
 
 __pycache__/
 text_news.txt

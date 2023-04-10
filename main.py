@@ -3,7 +3,14 @@ from flask_cors import CORS
 import numpy as np
 import pickle
 import sqlite3
+import uuid
 from sklearn.metrics.pairwise import cosine_similarity
+from flask import render_template
+from dotenv import load_dotenv
+load_dotenv()
+from os import getenv
+
+API_URL = getenv('APP_URL')
 
 # load the vectorizer from file
 with open('vectorizer_0.pkl', 'rb') as f:
@@ -80,3 +87,44 @@ def similar_qns():
         queries = [{"qn":"No related queries","link":"#"}]
     
     return jsonify(queries)
+
+
+@app.route("/applications",methods=["POST"])
+def create_application():
+    application = request.json
+    application_id = uuid.uuid4().hex
+    application["applicationId"] = application_id
+    # Save the application data to the database
+    conn = sqlite3.connect("new_qa.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO applications (applicationId, email_address, type, category, subcategory) VALUES (?, ?, ?, ?, ?)", 
+                   (application_id, application["email_address"], application["type"], application["category"], application["subcategory"]))
+    conn.commit()
+    link = f"{API_URL}/applications/{application_id}"
+    return {"text":f"Visit {link} for updates on your application ","link":link}    
+
+@app.route("/applications/<application_id>",methods=["GET"])
+def get_application(application_id):
+    conn = sqlite3.connect("new_qa.db")
+    # Fetch the application from the database with the given application ID
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM applications WHERE applicationId=?", (application_id,))
+    application = cursor.fetchone()
+    
+    # Check if application exists
+    if application is None:
+        # Return a 404 error if the application doesn't exist
+        return "Application not found", 404
+    
+    # Convert the database row to a dictionary
+    application_dict = {
+        "applicationId": application[1],
+        "email_address": application[2],
+        "type": application[3],
+        "category": application[4],
+        "subcategory": application[5],
+        "status":"pending review"
+    }
+    
+    # Render a template with the application data
+    return render_template("application.html", application=application_dict)

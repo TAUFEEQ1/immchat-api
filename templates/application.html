@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Application Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Application Details</h1>
+        <table class="table table-bordered">
+            <tr>
+                <th>Application ID:</th>
+                <td>{{ application.applicationId }}</td>
+            </tr>
+            <tr>
+                <th>Email Address:</th>
+                <td>{{ application.email_address }}</td>
+            </tr>
+            <tr>
+                <th>Type:</th>
+                <td>{{ application.type }}</td>
+            </tr>
+            <tr>
+                <th>Category:</th>
+                <td>{{ application.category }}</td>
+            </tr>
+            <tr>
+                <th>Subcategory:</th>
+                <td>{{ application.subcategory }}</td>
+            </tr>
+        </table>
+    </div>
+    <script></script>
+</body>
+
+</html>
